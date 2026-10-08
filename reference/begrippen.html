@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Begrippenlijst Claude Code</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<main>
+<header class="lesson">
+  <div class="kicker">Referentie</div>
+  <h1>Begrippenlijst</h1>
+  <p class="lede">Eén woord, één betekenis. Alle lessen gebruiken deze termen.</p>
+</header>
+<div class="table-wrap"><table>
+  <tr><th>Term</th><th>Betekenis</th></tr>
+  <tr><td><strong>Agent</strong></td><td>AI die zelf acties uitvoert (bestanden lezen, commando's draaien, bestanden wijzigen), in plaats van alleen tekst terug te geven.</td></tr>
+  <tr><td><strong>Context</strong></td><td>Alles wat Claude in een sessie ziet: jouw berichten, gelezen bestanden, uitvoer van commando's. Raakt vol; <code>/clear</code> maakt hem leeg.</td></tr>
+  <tr><td><strong>Permission prompt</strong></td><td>Vraag om toestemming voordat Claude een actie uitvoert. Keuzes: Yes, Yes don't ask again, No.</td></tr>
+  <tr><td><strong>Permission mode</strong></td><td>Instelling die bepaalt welke acties zonder permission prompt mogen: Plan, Manual, Accept edits, Auto.</td></tr>
+  <tr><td><strong>Prompt injection</strong></td><td>Verborgen instructies in tekst van buiten (webpagina, issue, document) die Claude proberen te sturen.</td></tr>
+  <tr><td><strong>Projectmap</strong></td><td>De map waarin je Claude Code start. Claude leest daar zonder te vragen.</td></tr>
+  <tr><td><strong>Surface</strong></td><td>De plek waar je Claude Code gebruikt: terminal (CLI), VS Code, of de desktop-app (Code-tab).</td></tr>
+  <tr><td><strong>MCP</strong></td><td>Model Context Protocol. Standaard om Claude te koppelen aan externe systemen, zoals GitHub.</td></tr>
+  <tr><td><strong>MCP-server</strong></td><td>Een koppeling via MCP. Geeft Claude extra tools, bijvoorbeeld “issue lezen” of “pull request maken”.</td></tr>
+  <tr><td><strong>Skill</strong></td><td>Map met een <code>SKILL.md</code>: vaste instructies voor een terugkerende taak. Aanroepen met <code>/skill-naam</code>, of Claude laadt hem zelf als de beschrijving past.</td></tr>
+  <tr><td><strong>CLAUDE.md</strong></td><td>Bestand met projectregels dat Claude aan het begin van elke sessie leest.</td></tr>
+  <tr><td><strong>Token (GitHub)</strong></td><td>Wachtwoord-achtige sleutel waarmee de GitHub MCP-server namens jou werkt. Geef minimale rechten.</td></tr>
+</table></div>
+</main>
+</body>
+</html>

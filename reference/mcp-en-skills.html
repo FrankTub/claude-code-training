@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spiekbrief MCP en skills</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<main>
+<header class="lesson">
+  <div class="kicker">Referentie</div>
+  <h1>Spiekbrief: MCP en skills</h1>
+  <p class="meta">Bij <a href="../lessons/0002-github-mcp-koppelen.html">Les 2</a> en <a href="../lessons/0003-skills-van-vraag-tot-query.html">Les 3</a> · Bronnen: <a href="https://code.claude.com/docs/en/mcp">MCP</a>, <a href="https://code.claude.com/docs/en/skills">Skills</a></p>
+</header>
+
+<h2>GitHub MCP in vier stappen</h2>
+<ol>
+  <li>Fine-grained token op <a href="https://github.com/settings/personal-access-tokens">github.com/settings/personal-access-tokens</a>: owner ASZ, einddatum, <em>Only select repositories</em>, Read and write op <code>Actions</code>, <code>Contents</code>, <code>Issues</code>, <code>Pull requests</code>.</li>
+  <li>Token in 1Password; via <code>$PROFILE</code> als <code>$env:GITHUB_PAT</code> alleen tijdens <code>claude</code>.</li>
+  <li><pre>claude mcp add-json github '{"type":"http","url":"https://api.githubcopilot.com/mcp/","headers":{"Authorization":"Bearer ${GITHUB_PAT}"}}' -s user</pre></li>
+  <li><code>/mcp</code> in Claude: <code>connected</code> = goed, <code>failed</code> + 401 = token fout.</li>
+</ol>
+
+<h2>MCP-commando's</h2>
+<div class="table-wrap"><table>
+  <tr><td><code>claude mcp list</code></td><td>Alle servers</td></tr>
+  <tr><td><code>claude mcp get github</code></td><td>Details van één server</td></tr>
+  <tr><td><code>claude mcp remove github</code></td><td>Server verwijderen</td></tr>
+  <tr><td><code>/mcp</code></td><td>Status in een sessie</td></tr>
+</table></div>
+<div class="table-wrap"><table>
+  <tr><th>Scope</th><th>Opslag</th><th>Gedeeld</th></tr>
+  <tr><td><code>local</code> (standaard)</td><td><code>~/.claude.json</code>, dit project</td><td>Nee</td></tr>
+  <tr><td><code>user</code></td><td><code>~/.claude.json</code>, alle projecten</td><td>Nee</td></tr>
+  <tr><td><code>project</code></td><td><code>.mcp.json</code> in de repo</td><td>Ja, nooit met token erin</td></tr>
+</table></div>
+
+<h2>Skills</h2>
+<pre>claude plugin marketplace add mattpocock/skills
+claude plugin install mattpocock-skills@mattpocock</pre>
+<div class="table-wrap"><table>
+  <tr><td><code>/skills</code></td><td>Lijst van beschikbare skills</td></tr>
+  <tr><td><code>/mattpocock-skills:grilling &lt;vraag&gt;</code></td><td>Claude ondervraagt je tot de vraag scherp is</td></tr>
+  <tr><td><code>/mattpocock-skills:code-review main</code></td><td>Review van je wijzigingen sinds <code>main</code>: standaarden en spec</td></tr>
+  <tr><td><code>/mattpocock-skills:pr</code></td><td>Schrijft de beschrijving van een pull request</td></tr>
+  <tr><td><code>/mattpocock-skills:teach</code></td><td>Claude als docent; zo is deze cursus gemaakt</td></tr>
+</table></div>
+<p class="sidenote">Eigen skill: map <code>.claude/skills/&lt;naam&gt;/SKILL.md</code> (project) of <code>~/.claude/skills/&lt;naam&gt;/SKILL.md</code> (persoonlijk). De <code>description</code> bepaalt wanneer Claude hem zelf laadt.</p>
+
+<h2>Van vraag tot query</h2>
+<p><code>/grilling</code> (Plan mode) › Claude schrijft query › <strong>jij</strong> voert uit, alleen aggregaten terug › <code>/code-review</code> › <code>/pr</code> › pull request via GitHub MCP.</p>
+</main>
+</body>
+</html>

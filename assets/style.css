@@ -1,0 +1,96 @@
+/* Gedeelde stijl voor alle lessen en referenties. Tufte-achtig: rustig, leesbaar, print goed. */
+:root {
+  --bg: #fffff8;
+  --fg: #1d1d1b;
+  --muted: #6b6b66;
+  --rule: #d8d6cc;
+  --accent: #8a2a1c;
+  --ok: #2f6b3a;
+  --ok-bg: #e6f1e6;
+  --bad: #9b2c22;
+  --bad-bg: #f7e4e1;
+  --code-bg: #f1efe6;
+  --warn-bg: #fbf1d9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1b19; --fg: #e9e7df; --muted: #a09e95; --rule: #3a3935;
+    --accent: #e08a72; --ok: #8fd19a; --ok-bg: #1f3323; --bad: #f09a8f; --bad-bg: #3a2220;
+    --code-bg: #262622; --warn-bg: #352d18;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b1b19; --fg: #e9e7df; --muted: #a09e95; --rule: #3a3935;
+  --accent: #e08a72; --ok: #8fd19a; --ok-bg: #1f3323; --bad: #f09a8f; --bad-bg: #3a2220;
+  --code-bg: #262622; --warn-bg: #352d18;
+}
+
+* { box-sizing: border-box; }
+html { font-size: 18px; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  line-height: 1.55;
+}
+main { max-width: 42rem; margin: 0 auto; padding: 2.5rem 16px 4rem; }
+header.lesson { border-bottom: 1px solid var(--rule); margin-bottom: 2rem; padding-bottom: 1rem; }
+.kicker { font: 600 0.75rem/1 system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 { font-weight: 400; font-size: 2.1rem; line-height: 1.15; margin: .4rem 0 .6rem; }
+h2 { font-weight: 400; font-style: italic; font-size: 1.45rem; margin: 2.4rem 0 .6rem; }
+h3 { font-size: 1.05rem; margin: 1.6rem 0 .4rem; }
+p, li { hyphens: auto; }
+a { color: var(--accent); }
+.lede { font-size: 1.15rem; color: var(--muted); margin: 0; }
+.meta { font: 0.8rem system-ui, sans-serif; color: var(--muted); margin-top: .6rem; }
+
+code, kbd, pre { font-family: Consolas, "SF Mono", Menlo, monospace; font-size: .85em; }
+code { background: var(--code-bg); padding: .08em .3em; border-radius: 3px; }
+kbd { border: 1px solid var(--rule); border-bottom-width: 2px; padding: .05em .35em; border-radius: 4px; background: var(--code-bg); }
+pre { background: var(--code-bg); padding: .8rem 1rem; overflow-x: auto; border-radius: 4px; line-height: 1.4; }
+
+.win { border-left: 3px solid var(--accent); padding: .2rem 0 .2rem 1rem; margin: 1.2rem 0; }
+.warn { background: var(--warn-bg); padding: .8rem 1rem; border-radius: 4px; margin: 1.2rem 0; }
+.asz { background: var(--warn-bg); border-left: 3px solid var(--accent); padding: .6rem 1rem; margin: 1.2rem 0; font-size: .95rem; }
+.asz::before { content: "ASZ-afspraak · "; font: 600 .75rem system-ui, sans-serif; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+.sidenote { font-size: .85rem; color: var(--muted); }
+cite, .cite { font-size: .8rem; font-style: normal; color: var(--muted); }
+
+table { border-collapse: collapse; width: 100%; font-size: .92rem; margin: 1rem 0; }
+th, td { text-align: left; padding: .4rem .5rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 600; font-family: system-ui, sans-serif; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.table-wrap { overflow-x: auto; }
+
+ol.steps { counter-reset: s; list-style: none; padding-left: 0; }
+ol.steps > li { counter-increment: s; position: relative; padding-left: 2.2rem; margin: .9rem 0; }
+ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: .05rem; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--accent); color: var(--bg); font: 600 .8rem/1.5rem system-ui, sans-serif; text-align: center; }
+label.check { display: block; cursor: pointer; }
+
+.surface-tabs { display: flex; gap: .4rem; flex-wrap: wrap; margin: .8rem 0 .4rem; }
+.surface-tabs button { font: .8rem system-ui, sans-serif; padding: .3rem .7rem; border: 1px solid var(--rule); background: transparent; color: var(--fg); border-radius: 99px; cursor: pointer; }
+.surface-tabs button[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+.surface-panel[hidden] { display: none; }
+
+nav.course { font: .85rem system-ui, sans-serif; border-top: 1px solid var(--rule); margin-top: 3rem; padding-top: 1rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.ask { font-style: italic; color: var(--muted); border-top: 1px dashed var(--rule); padding-top: 1rem; margin-top: 2rem; }
+
+/* Quiz */
+.quiz { border: 1px solid var(--rule); border-radius: 6px; padding: 1rem 1.1rem; margin: 1.4rem 0; }
+.quiz legend { font: 600 .75rem system-ui, sans-serif; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 0 .3rem; }
+.quiz .q { margin: 0 0 .7rem; }
+.quiz button.opt { display: block; width: 100%; text-align: left; font: inherit; font-size: .95rem; padding: .55rem .8rem; margin: .35rem 0; border: 1px solid var(--rule); border-radius: 4px; background: transparent; color: var(--fg); cursor: pointer; }
+.quiz button.opt:hover:not(:disabled) { border-color: var(--fg); }
+.quiz button.opt.right { background: var(--ok-bg); border-color: var(--ok); }
+.quiz button.opt.wrong { background: var(--bad-bg); border-color: var(--bad); }
+.quiz .why { margin: .7rem 0 0; font-size: .92rem; }
+.quiz .why[hidden] { display: none; }
+.score { font: .85rem system-ui, sans-serif; color: var(--muted); }
+
+@media print {
+  :root { --bg: #fff; --fg: #000; }
+  body { font-size: 11pt; }
+  main { max-width: none; padding: 0; }
+  .surface-tabs, nav.course, .ask, .quiz button.opt { break-inside: avoid; }
+  .surface-panel[hidden] { display: block !important; }
+  .quiz .why[hidden] { display: block !important; }
+  a { color: inherit; }
+}

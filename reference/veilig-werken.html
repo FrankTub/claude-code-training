@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spiekbrief veilig werken</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<main>
+<header class="lesson">
+  <div class="kicker">Referentie</div>
+  <h1>Spiekbrief: veilig werken met Claude Code</h1>
+  <p class="meta">Bij <a href="../lessons/0001-van-chat-naar-agent-veilig-werken.html">Les 1</a> · Bronnen: <a href="https://code.claude.com/docs/en/security">Security</a>, <a href="https://code.claude.com/docs/en/permission-modes">Permission modes</a>, <a href="https://code.claude.com/docs/en/data-usage">Data usage</a></p>
+</header>
+
+<h2>Zes regels</h2>
+<ol>
+  <li><strong>Geen databaseverbinding.</strong> Claude schrijft de query, jij voert hem uit. Resultaten alleen geaggregeerd terugplakken, nooit herleidbaar naar een patiënt.</li>
+  <li><strong>Geen patiëntdata.</strong> Niet in prompts, niet in de map waar je Claude start. Verzonnen waarden gebruiken.</li>
+  <li><strong>Start in een projectmap.</strong> Nooit in je home-map of een netwerkschijf. Claude leest zonder vragen alles in de startmap.</li>
+  <li><strong>Lees voor je “Yes” kiest.</strong> Past de actie bij je vraag? Zo niet: No + toelichting.</li>
+  <li><strong>Wantrouw inhoud van buiten.</strong> Webpagina's, issues en documenten kunnen verborgen instructies bevatten (prompt injection).</li>
+  <li><strong>Geen <code>/feedback</code> bij gevoelige sessies.</strong> Het stuurt het gesprek, inclusief code, naar Anthropic; het wordt 5 jaar bewaard.</li>
+</ol>
+
+<h2>Permission modes</h2>
+<div class="table-wrap"><table>
+  <tr><th>Mode</th><th>Zonder vragen</th><th>Wanneer</th></tr>
+  <tr><td>Plan</td><td>Lezen, plan maken</td><td>Onderzoeken, eerst begrijpen</td></tr>
+  <tr><td>Manual (<code>default</code>)</td><td>Lezen</td><td>Gevoelig werk</td></tr>
+  <tr><td>Accept edits</td><td>Lezen, bestanden wijzigen in projectmap</td><td>Werk dat je nakijkt</td></tr>
+  <tr><td>Auto</td><td>Bijna alles; classifier blokkeert risico</td><td>Met ervaring</td></tr>
+  <tr><td>Bypass permissions</td><td>Alles</td><td>Nooit op je werkplek; alleen in een geïsoleerde VM/container</td></tr>
+</table></div>
+<p><strong>Wisselen:</strong> terminal <kbd>Shift</kbd>+<kbd>Tab</kbd> · VS Code mode-indicator · Desktop mode-selector naast verzendknop.</p>
+
+<h2>Sneltoetsen en commando's</h2>
+<div class="table-wrap"><table>
+  <tr><td><kbd>Esc</kbd></td><td>Claude stoppen; context blijft</td></tr>
+  <tr><td><kbd>Esc</kbd> <kbd>Esc</kbd> / <code>/rewind</code></td><td>Terug naar eerder punt (alleen bestandswijzigingen van Claude, niet van commando's)</td></tr>
+  <tr><td><code>/clear</code></td><td>Schone lei tussen losse taken</td></tr>
+  <tr><td><code>/permissions</code></td><td>Bekijk en beheer allow/ask/deny-regels</td></tr>
+  <tr><td><code>/context</code></td><td>Zie wat er in de context zit</td></tr>
+</table></div>
+
+<h2>Extra opletten bij</h2>
+<p><code>curl</code>, <code>wget</code>, <code>Invoke-WebRequest</code> (internet) · <code>rm</code>, <code>Remove-Item</code>, <code>DROP</code>, <code>DELETE</code> (verwijderen) · <code>git push</code> (publiceren) · paden buiten je projectmap.</p>
+
+<h2>Gevoelige bestanden blokkeren</h2>
+<p>In <code>.claude/settings.json</code> van het project:</p>
+<pre>{
+  "permissions": {
+    "deny": ["Read(./.env)", "Read(./secrets/**)"]
+  }
+}</pre>
+<p class="sidenote">Deny-regels gelden in elke mode. Een <code>.claudeignore</code>-bestand doet niets. <cite>(<a href="https://code.claude.com/docs/en/permissions">Permissions</a>)</cite></p>
+
+<h2>Wat gebeurt er met je data?</h2>
+<p class="sidenote">Zakelijk account (Team/Enterprise): geen training op je prompts en code; standaard 30 dagen bewaard bij Anthropic. Lokaal: gesprekken 30 dagen in <code>~/.claude/projects/</code>, als platte tekst. <cite>(<a href="https://code.claude.com/docs/en/data-usage">Data usage</a>)</cite></p>
+</main>
+</body>
+</html>

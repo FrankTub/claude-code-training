@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skills: van vraag tot query</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/course.js" defer></script>
+</head>
+<body>
+<main>
+
+<header class="lesson">
+  <div class="kicker">Les 3 van 3 · ± 20 minuten</div>
+  <h1>Skills: van vraag tot query</h1>
+  <p class="lede">Een skill is een vaste werkwijze die je met één commando start. In deze les zie je drie skills een vraag omzetten in een query en een pull request.</p>
+  <p class="meta">Referentie: <a href="../reference/mcp-en-skills.html">Spiekbrief MCP en skills</a> · <a href="../reference/begrippen.html">Begrippenlijst</a> · Vorige les: <a href="0002-github-mcp-koppelen.html">GitHub koppelen</a></p>
+</header>
+
+<div class="win"><strong>Na deze les kun je:</strong> skills installeren en vinden, een skill aanroepen, en <code>/grilling</code> gebruiken om je eigen vraag scherp te krijgen.</div>
+
+<h2>1. Wat is een skill?</h2>
+<p>Een skill is een map met een bestand <code>SKILL.md</code>: instructies voor een taak die steeds terugkomt. Je start een skill zelf met <code>/</code> en de naam. Claude kan een skill ook zelf laden als je vraag past bij de <code>description</code> bovenin <code>SKILL.md</code>. De rest van de skill laadt pas als hij gebruikt wordt. <cite>(<a href="https://code.claude.com/docs/en/skills">Skills docs</a>)</cite></p>
+<p>Skills komen vaak in een <em>plugin</em>: een pakket met skills, soms ook tools en hooks. Skills uit een plugin heten <code>/plugin-naam:skill-naam</code>. <cite>(<a href="https://code.claude.com/docs/en/skills">Skills docs</a>)</cite></p>
+
+<div class="warn"><strong>Een plugin is code van iemand anders.</strong> Skills kunnen commando's laten uitvoeren en tools vooraf goedkeuren. Installeer alleen plugins van bronnen die je vertrouwt, en kijk eerst wat erin staat.</div>
+
+<h2>2. Installeren <span class="sidenote">(iedereen)</span></h2>
+<p>We gebruiken de skills van <a href="https://github.com/mattpocock/skills">Matt Pocock</a>. Voer uit in een terminal:</p>
+<pre>claude plugin marketplace add mattpocock/skills
+claude plugin install mattpocock-skills@mattpocock</pre>
+<p>Start daarna <code>claude</code> en typ <code>/skills</code>. Je ziet nu onder andere <code>mattpocock-skills:grilling</code>, <code>mattpocock-skills:code-review</code> en <code>mattpocock-skills:pr</code>. Typ <code>/grill</code> en de autocomplete vult de rest aan.</p>
+<p class="sidenote">Desktop-app: open de Code-tab, typ <code>/</code> in het invoerveld en zoek de skill in de lijst.</p>
+
+<h2>3. Demo: van vraag tot query <span class="sidenote">(Frank, ± 12 min)</span></h2>
+<p>Kijk mee en let op twee dingen: wanneer stelt Claude vragen, en wanneer vraagt het toestemming?</p>
+<div class="asz">Claude krijgt geen databaseverbinding. Claude schrijft de query; Frank voert hem zelf uit. Terug in de chat komt alleen een geaggregeerd resultaat dat niet naar een patiënt wijst.</div>
+<ol class="steps">
+  <li><strong>Vraag scherp krijgen.</strong> In Plan mode: <code>/mattpocock-skills:grilling Ik wil per afdeling per maand het aantal opnames tellen.</code> Claude stelt genummerde vragen, elk met een aanbevolen antwoord. Wat telt als opname? Welke periode? Welke afdelingen? Je antwoordt per nummer.</li>
+  <li><strong>Query laten schrijven.</strong> Als het antwoord duidelijk is, maakt Claude een plan. Frank keurt het goed; Claude schrijft de query naar een bestand in de repo. Let op de permission prompt voor het schrijven.</li>
+  <li><strong>Zelf uitvoeren.</strong> Frank draait de query in zijn eigen databasetool. Hij plakt alleen het geaggregeerde resultaat terug als Claude het moet controleren.</li>
+  <li><strong>Laten reviewen.</strong> <code>/mattpocock-skills:code-review main</code>. Twee subagents kijken in een frisse context: past de code bij de regels van de repo, en doet hij wat gevraagd is?</li>
+  <li><strong>Pull request maken.</strong> <code>/mattpocock-skills:pr</code> schrijft de beschrijving. Claude maakt de pull request via de GitHub MCP-server uit les 2. Frank leest de prompt voor <code>create_pull_request</code> voordat hij “Yes” kiest.</li>
+</ol>
+<p class="sidenote">Tip: een aantal van 1 of 2 in een kleine groep kan herleidbaar zijn naar een persoon. Twijfel je of een aggregaat herleidbaar is? Plak het dan niet.</p>
+
+<h2>4. Zelf doen <span class="sidenote">(± 5 min)</span></h2>
+<ol class="steps">
+  <li><label class="check"><input type="checkbox"> Typ <code>/skills</code> en zoek <code>grilling</code>.</label></li>
+  <li><label class="check"><input type="checkbox"> Zet de mode op Plan. Start <code>/mattpocock-skills:grilling</code> met een vraag uit je eigen werk, zonder patiëntgegevens. Bijvoorbeeld: <em>“Ik wil een overzicht van het aantal geplande afspraken per poli per week.”</em></label></li>
+  <li><label class="check"><input type="checkbox"> Beantwoord één ronde vragen. Merk op welke vraag je zelf nog niet had bedacht.</label></li>
+</ol>
+<div class="win">Gelukt? Je hebt een skill gevonden, gestart en gebruikt om je vraag scherper te maken voordat er één regel SQL bestaat.</div>
+
+<h2>5. Toets jezelf</h2>
+<p class="sidenote">Eerst uit je hoofd, niet terug scrollen.</p>
+
+<fieldset class="quiz" data-answer="1">
+  <legend>Vraag 1</legend>
+  <p class="q">Hoe start je zelf een skill?</p>
+  <button class="opt">Open SKILL.md en kopieer de tekst erin</button>
+  <button class="opt">Typ een slash, gevolgd door de naam</button>
+  <button class="opt">Zet de skillnaam bovenaan in je CLAUDE.md</button>
+  <p class="why">Bijvoorbeeld <code>/mattpocock-skills:grilling</code>. Tekst na de naam gaat als argument mee.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="2">
+  <legend>Vraag 2</legend>
+  <p class="q">Claude laadt soms zelf een skill. Waarop baseert Claude die keuze?</p>
+  <button class="opt">De naam van de map met de skill</button>
+  <button class="opt">Hoe vaak je hem eerder hebt gebruikt</button>
+  <button class="opt">De beschrijving in de frontmatter van SKILL.md</button>
+  <p class="why">Claude vergelijkt je vraag met de <code>description</code>. Daarom beschrijft een goede skill precies wanneer hij nodig is.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="0">
+  <legend>Vraag 3</legend>
+  <p class="q">Wie voert in de demo de query uit op de database?</p>
+  <button class="opt">Jij zelf, en je deelt alleen aggregaten</button>
+  <button class="opt">Claude, via een databaseverbinding met alleen leesrechten</button>
+  <button class="opt">Claude, maar alleen op de lokale testomgeving</button>
+  <p class="why">ASZ-afspraak: geen databaseverbindingen voor Claude. Jij voert uit; alleen geaggregeerde, niet-herleidbare resultaten gaan terug.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="1">
+  <legend>Vraag 4</legend>
+  <p class="q">Wat doe je voordat je een plugin met skills installeert?</p>
+  <button class="opt">Niets, want skills zijn alleen tekst zonder risico</button>
+  <button class="opt">Controleren wie hem maakt en wat erin staat</button>
+  <button class="opt">Hem installeren in Auto mode om tijd te sparen</button>
+  <p class="why">Een plugin kan commando's laten uitvoeren en tools vooraf goedkeuren. Behandel hem als software van een derde.</p>
+</fieldset>
+<p class="score" data-quiz-score></p>
+
+<h2>Lees verder</h2>
+<p><strong>Primaire bron:</strong> <a href="https://code.claude.com/docs/en/skills">Claude Code docs: Skills</a>. Daarna de <a href="https://github.com/mattpocock/skills">README van mattpocock/skills</a> voor een overzicht van alle skills.</p>
+
+<p class="ask">Vraag Claude Code gerust: <em>“Welke skills heb ik, en welke past bij het schrijven van een nieuwe query?”</em> Het is je docent: blijf doorvragen.</p>
+
+<nav class="course">
+  <a href="0002-github-mcp-koppelen.html">← Les 2: GitHub koppelen</a>
+  <a href="../reference/draaiboek.html">Draaiboek workshop →</a>
+</nav>
+
+</main>
+</body>
+</html>
