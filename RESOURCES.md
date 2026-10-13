@@ -15,12 +15,14 @@
 - [Docs: Skills](https://code.claude.com/docs/en/skills)
   Wat een skill is, locaties, `/skill-naam`, `/skills`, automatisch laden via `description`. Use for: les skills.
 - [Docs: Best practices](https://code.claude.com/docs/en/best-practices)
-  Explore-plan-code, verificatie geven, `/clear`, `Esc`, `/rewind`, faalpatronen. Use for: werkwijze en verschil met chat.
+  Explore-plan-code, verificatie geven, `/clear`, `/compact`, `Esc`, `/rewind`, faalpatronen. Use for: werkwijze en verschil met chat; les 2 context window.
+- [Docs: Explore the context window](https://code.claude.com/docs/en/context-window)
+  Interactieve simulatie: wat laadt bij start, wat elk gelezen bestand kost, wat `/compact` bewaart. Use for: les 2.
 
 - Franks interne wiki "Machine setup" (ASZ)
-  Installatie Claude Code, mattpocock-skills, GitHub MCP met `GITHUB_PAT` via 1Password en `claude mcp add-json ... -s user`. Use for: les 2 en 3; ASZ-standaard voor setup.
+  Installatie Claude Code, mattpocock-skills, GitHub MCP met `GITHUB_PAT` via 1Password en `claude mcp add-json ... -s user`. Use for: les 4 en 5; ASZ-standaard voor setup.
 - [mattpocock/skills (GitHub)](https://github.com/mattpocock/skills)
-  Bron van de skills-plugin (`grilling`, `code-review`, `pr`, `teach`). Use for: les 3.
+  Bron van de skills-plugin (`grilling`, `code-review`, `pr`, `teach`). Use for: les 4.
 
 ## Wisdom (Communities)
 

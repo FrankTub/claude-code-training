@@ -17,20 +17,22 @@
 <h2>Vooraf</h2>
 <ul>
   <li>Deelnemers hebben Claude Code geïnstalleerd (terminal of VS Code) of de desktop-app (niet-technisch).</li>
-  <li>Data engineers en BI hebben vooraf een fine-grained GitHub-token gemaakt (les 2, stap 1). Dat scheelt 5 minuten.</li>
-  <li>Jij: repo schoon op een nieuwe branch, query-vraag voor de demo klaar, databasetool open, GitHub MCP <code>connected</code>.</li>
-  <li>Stuur de map <code>claude-code-training</code> of de drie lessen vooraf rond.</li>
+  <li>Data engineers en BI hebben vooraf een fine-grained GitHub-token gemaakt (les 5, stap 1). Dat scheelt 5 minuten.</li>
+  <li>Jij: repo schoon op een nieuwe branch, query-vraag voor de demo klaar, databasetool open, GitHub MCP <code>connected</code>. De demo in les 4 maakt al een pull request via GitHub MCP; deelnemers koppelen het zelf pas in les 5.</li>
+  <li>Stuur de map <code>claude-code-training</code> of de vijf lessen vooraf rond.</li>
 </ul>
 
 <h2>Tijdschema</h2>
 <div class="table-wrap"><table>
   <tr><th>Tijd</th><th>Wat</th><th>Wie</th></tr>
-  <tr><td>0–5</td><td>Waarom: chat versus agent. Toon één permission prompt live.</td><td>Jij</td></tr>
-  <tr><td>5–20</td><td><a href="../lessons/0001-van-chat-naar-agent-veilig-werken.html">Les 1</a>: ASZ-afspraken, modes, oefening in de oefenmap.</td><td>Iedereen</td></tr>
-  <tr><td>20–32</td><td><a href="../lessons/0002-github-mcp-koppelen.html">Les 2</a>: GitHub MCP. Engineers en BI doen mee; niet-technisch kijkt mee.</td><td>Technisch</td></tr>
-  <tr><td>32–50</td><td><a href="../lessons/0003-skills-van-vraag-tot-query.html">Les 3</a>: skills installeren, jouw demo van vraag tot pull request, daarna <code>/grilling</code> zelf.</td><td>Jij, dan iedereen</td></tr>
-  <tr><td>50–57</td><td>Quizzen van de drie lessen, samen bespreken.</td><td>Iedereen</td></tr>
-  <tr><td>57–60</td><td>Waar stel je vragen na vandaag? Spiekbrieven delen.</td><td>Jij</td></tr>
+  <tr><td>0–3</td><td>Waarom: chat versus agent. Toon één permission prompt live.</td><td>Jij</td></tr>
+  <tr><td>3–13</td><td><a href="../lessons/0001-van-chat-naar-agent-veilig-werken.html">Les 1</a>: ASZ-afspraken, modes, oefening in de oefenmap.</td><td>Iedereen</td></tr>
+  <tr><td>13–21</td><td><a href="../lessons/0002-context-window.html">Les 2</a>: het context window. Jij toont <code>/context</code> vóór en na het lezen van een groot bestand, en daarna <code>/clear</code>. Deelnemers doen de oefening in de oefenmap.</td><td>Jij, dan iedereen</td></tr>
+  <tr><td>21–29</td><td><a href="../lessons/0003-agents-md-en-context-md.html">Les 3</a>: AGENTS.md en CONTEXT.md. Jij toont <code>/init</code> en de tabel “welk bestand leest Claude”. Deelnemers doen stap 1–2 van de oefening; de rest is huiswerk.</td><td>Jij, dan iedereen</td></tr>
+  <tr><td>29–43</td><td><a href="../lessons/0004-skills-van-vraag-tot-query.html">Les 4</a>: skills installeren, jouw demo van vraag tot pull request, daarna <code>/grilling</code> zelf.</td><td>Jij, dan iedereen</td></tr>
+  <tr><td>43–53</td><td><a href="../lessons/0005-github-mcp-koppelen.html">Les 5</a>: GitHub MCP. Engineers en BI doen mee; niet-technisch kijkt mee.</td><td>Technisch</td></tr>
+  <tr><td>53–58</td><td>Eén quizvraag per les, samen bespreken. De rest van de quizzen is huiswerk.</td><td>Iedereen</td></tr>
+  <tr><td>58–60</td><td>Waar stel je vragen na vandaag? Spiekbrieven delen.</td><td>Jij</td></tr>
 </table></div>
 
 <h2>Tijdens de demo hardop benoemen</h2>
@@ -45,7 +47,7 @@
 <ul>
   <li><code>/mcp</code> toont <code>failed</code>: token verlopen, verkeerde repo gekozen, of <code>GITHUB_PAT</code> niet gezet. Controleer met <code>claude mcp get github</code>.</li>
   <li>Skill niet gevonden: <code>claude plugin marketplace add mattpocock/skills</code> overgeslagen, of Claude niet herstart na installatie.</li>
-  <li>Tijd tekort: laat de oefening van les 3 als huiswerk.</li>
+  <li>Tijd tekort: laat de oefeningen van les 3 en les 4 als huiswerk. Les 2 kan desnoods als demo zonder oefening.</li>
 </ul>
 </main>
 </body>

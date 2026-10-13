@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projectkennis vastleggen</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/course.js" defer></script>
+</head>
+<body>
+<main>
+
+<header class="lesson">
+  <div class="kicker">Les 3 van 5 · ± 8 minuten</div>
+  <h1>Projectkennis vastleggen: AGENTS.md en CONTEXT.md</h1>
+  <p class="lede">Elke sessie begint Claude zonder geheugen. Met een paar Markdown-bestanden in je repo weet Claude toch direct hoe jullie werken en wat jullie woorden betekenen.</p>
+  <p class="meta">Referentie: <a href="../reference/begrippen.html">Begrippenlijst</a> · Vorige les: <a href="0002-context-window.html">Het context window</a></p>
+</header>
+
+<div class="win"><strong>Na deze les kun je:</strong> uitleggen welk instructiebestand Claude leest, een korte <code>AGENTS.md</code> of <code>CLAUDE.md</code> voor je eigen repo schrijven, en een woordenlijst met domeintaal (<code>CONTEXT.md</code>) opzetten.</div>
+
+<h2>1. Waarom een instructiebestand?</h2>
+<p>Claude onthoudt niets tussen sessies. Zonder instructiebestand leg je elke keer opnieuw uit: “we schrijven T-SQL”, “queries staan in <code>example-queries/</code>”, “Claude krijgt geen databaseverbinding”. Een instructiebestand in de repo laadt Claude aan het begin van elke sessie. <cite>(<a href="https://code.claude.com/docs/en/memory">Docs: memory</a>)</cite></p>
+<p>Het bestand is gewone tekst in Git. Collega's lezen het, verbeteren het via een pull request, en iedereen krijgt dezelfde afspraken.</p>
+
+<h2>2. Welke bestanden zijn er?</h2>
+<div class="table-wrap"><table>
+  <tr><th>Bestand</th><th>Voor wie</th><th>Wanneer gebruiken</th></tr>
+  <tr><td><code>AGENTS.md</code></td><td>Alle coding agents: Claude Code, GitHub Copilot, Codex, Cursor en andere</td><td>Je team gebruikt meer dan één AI-tool. Eén bestand voor allemaal.</td></tr>
+  <tr><td><code>CLAUDE.md</code></td><td>Alleen Claude Code</td><td>Je team gebruikt alleen Claude Code, of je wilt instructies die alleen voor Claude gelden.</td></tr>
+  <tr><td><code>CLAUDE.local.md</code></td><td>Alleen jij, in dit project</td><td>Persoonlijke voorkeuren. Zet het bestand in <code>.gitignore</code>.</td></tr>
+  <tr><td><code>~/.claude/CLAUDE.md</code></td><td>Alleen jij, in alle projecten</td><td>Bijvoorbeeld: “antwoord in het Nederlands”.</td></tr>
+  <tr><td><code>CONTEXT.md</code></td><td>Mensen en agents</td><td>Woordenlijst met de domeintaal van het project. Laadt <em>niet</em> vanzelf; zie stap 5.</td></tr>
+</table></div>
+<p class="sidenote">Bestanden in submappen laden pas als Claude in die submap werkt. Zo kan <code>example-queries/CLAUDE.md</code> regels geven die alleen voor queries gelden.</p>
+
+<h2>3. Welk bestand leest Claude?</h2>
+<p>Sinds v2.1.277 leest Claude Code <code>AGENTS.md</code> zelf. Standaard geldt: <code>CLAUDE.md</code> gaat voor. <cite>(<a href="https://code.claude.com/docs/en/memory#agents-md">Docs: AGENTS.md</a>)</cite></p>
+<div class="table-wrap"><table>
+  <tr><th>In je repo</th><th>Claude leest</th></tr>
+  <tr><td>Alleen <code>AGENTS.md</code></td><td><code>AGENTS.md</code></td></tr>
+  <tr><td><code>AGENTS.md</code> en <code>CLAUDE.md</code></td><td>Alleen <code>CLAUDE.md</code>. <code>AGENTS.md</code> valt weg!</td></tr>
+  <tr><td><code>CLAUDE.md</code> met de regel <code>@AGENTS.md</code></td><td>Beide: eerst <code>AGENTS.md</code>, daarna de rest van <code>CLAUDE.md</code></td></tr>
+</table></div>
+<p>Let op de tweede rij. Ook een <code>CLAUDE.local.md</code> telt als <code>CLAUDE.md</code>. Maak je er een aan, dan leest Claude jouw <code>AGENTS.md</code> niet meer.</p>
+<p><strong>Advies:</strong> houd één bron. Gebruikt je team ook andere tools, schrijf dan <code>AGENTS.md</code>. Heb je Claude-specifieke regels nodig, maak dan een <code>CLAUDE.md</code> die <code>AGENTS.md</code> importeert:</p>
+<pre>@AGENTS.md
+
+## Alleen voor Claude Code
+- Gebruik de skill /adhoc-query voor nieuwe queries.</pre>
+<p class="sidenote">Op Windows: gebruik deze import, geen symlink van <code>CLAUDE.md</code> naar <code>AGENTS.md</code>. Een symlink vraagt beheerdersrechten, en Git maakt er bij collega's vaak een bestand van één regel van.</p>
+
+<h2>4. Wat zet je erin?</h2>
+<p>Schrijf alleen wat Claude niet zelf uit de code haalt, en wat in elke sessie telt. Houd het kort: onder de 200 regels. Een lang bestand kost context (zie <a href="0002-context-window.html">les 2</a>) en Claude volgt het slechter. <cite>(<a href="https://code.claude.com/docs/en/memory">Docs: memory</a>)</cite></p>
+<div class="table-wrap"><table>
+  <tr><th>Wel</th><th>Niet</th></tr>
+  <tr><td>Commando's om te bouwen, testen, linten</td><td>Wat Claude in één blik op de mappen ziet</td></tr>
+  <tr><td>Conventies die afwijken van de standaard</td><td>Algemene adviezen als “schrijf nette code”</td></tr>
+  <tr><td>Afspraken over data en veiligheid</td><td>Wachtwoorden, tokens, servernamen, patiëntgegevens</td></tr>
+  <tr><td>Waar dingen staan die niet voor de hand liggen</td><td>Lange uitleg die maar voor één taak geldt (maak daar een skill van)</td></tr>
+</table></div>
+<p>Voorbeeld voor een repo met SQL-queries:</p>
+<pre># Queries ASZ-datawarehouse
+
+## Werkwijze
+- Queries in T-SQL. Eén query per bestand in `queries/`, naam: `onderwerp-wat.sql`.
+- Kijk eerst in `example-queries/` hoe een tabel gebruikt wordt. Neem joins en filters daaruit over.
+- Begrippen staan in @CONTEXT.md. Gebruik die woorden in namen en commentaar.
+
+## Data
+- Claude heeft geen databaseverbinding. De gebruiker voert queries zelf uit.
+- Vraag nooit om echte resultaten. Werk alleen met geaggregeerde uitkomsten
+  die niet naar een patiënt wijzen.
+- Selecteer geen patiëntnummer, naam of geboortedatum, tenzij de vraag dat expliciet eist.
+  Meld het dan bovenaan je antwoord.</pre>
+<div class="warn"><strong>Een instructiebestand is geen slot.</strong> Claude leest het als context en volgt het meestal. Het blokkeert niets. Moet iets écht onmogelijk zijn, zoals het lezen van <code>.env</code>, gebruik dan een deny-regel in <code>/permissions</code>. Zie <a href="0001-van-chat-naar-agent-veilig-werken.html">les 1</a>.</div>
+
+<h2>5. CONTEXT.md: de taal van je domein</h2>
+<p>Wat is een “opname”? Telt een dagopname mee? Is een “subtraject” hetzelfde als een DBC? Elke afdeling heeft eigen antwoorden. Claude raadt die niet. Een woordenlijst legt ze één keer vast, voor collega's én voor agents.</p>
+<p><code>CONTEXT.md</code> is geen vaste Claude Code-functie. Het is een gewoonte uit het domain-driven design: één woord, één betekenis (<em>ubiquitous language</em>). De mattpocock-skills, die je in <a href="0004-skills-van-vraag-tot-query.html">les 4</a> installeert, gebruiken dit idee. Daar heet het bestand inmiddels <code>GLOSSARY.md</code>; de skill <code>/mattpocock-skills:domain-modeling</code> vult het aan terwijl je praat. De naam maakt niet uit, zolang het team één naam kiest.</p>
+<p>Voorbeeld (verzonnen definities, ter illustratie):</p>
+<pre># Begrippen
+
+**Opname** — Verblijf van een patiënt op een verpleegafdeling met overnachting.
+Dagopnames tellen niet mee. _Niet:_ "ziekenhuisopname", "klinische opname".
+
+**Subtraject** — Deel van een zorgtraject dat één DBC-zorgproduct oplevert.
+_Niet:_ "DBC" (dat is het product, niet het traject).
+
+**Afdeling** — Verpleegafdeling volgens de afdelingscode in het DWH.
+_Niet:_ "poli" (een poli is een specialisme met spreekuren).</pre>
+<p>Claude ziet <code>CONTEXT.md</code> alleen als iets ernaar verwijst. Twee manieren:</p>
+<ul>
+  <li><code>@CONTEXT.md</code> in je <code>AGENTS.md</code> of <code>CLAUDE.md</code>: laadt elke sessie. Goed voor een korte lijst.</li>
+  <li>Een zin als “Begrippen staan in <code>CONTEXT.md</code>; lees dat bestand bij twijfel”: Claude opent het alleen als het nodig is. Goed voor een lange lijst.</li>
+</ul>
+
+<h2>6. Veilig werken met instructiebestanden</h2>
+<div class="warn"><strong>Lees <code>AGENTS.md</code> en <code>CLAUDE.md</code> in een repo van een ander.</strong> Clone je een onbekende repo, dan volgt Claude de instructies die iemand anders schreef. Dat is een vorm van prompt injection. Verwijst een bestand naar iets buiten de projectmap (<code>@~/...</code>), dan vraagt Claude Code eerst toestemming. Kies alleen ja als je weet wat er staat.</div>
+<div class="asz">Instructiebestanden gaan mee in Git en zijn voor iedereen met toegang leesbaar. Zet er nooit patiëntgegevens, servernamen, wachtwoorden of tokens in.</div>
+
+<h2>7. Zelf doen <span class="sidenote">(± 3 min in de workshop, stap 3–5 thuis)</span></h2>
+<p>Werk in je oefenmap uit <a href="0001-van-chat-naar-agent-veilig-werken.html">les 1</a>. Vink elke stap af.</p>
+<ol class="steps">
+  <li><label class="check"><input type="checkbox"> Start Claude Code in de oefenmap. Typ <code>/init</code>. Claude bekijkt de map en stelt een <code>CLAUDE.md</code> voor. Lees de permission prompt voor het schrijven.</label></li>
+  <li><label class="check"><input type="checkbox"> Open het bestand. Schrap wat Claude ook zonder bestand weet. Voeg twee ASZ-afspraken toe uit stap 4.</label></li>
+  <li><label class="check"><input type="checkbox"> Maak een <code>CONTEXT.md</code> met drie begrippen uit je eigen werk. Zet <code>@CONTEXT.md</code> in je <code>CLAUDE.md</code>.</label></li>
+  <li><label class="check"><input type="checkbox"> Typ <code>/clear</code> en daarna <code>/context</code>. Zie je beide bestanden in de lijst met geladen instructies?</label></li>
+  <li><label class="check"><input type="checkbox"> Test: vraag “Wat is volgens dit project een opname?” Claude antwoordt met jouw definitie, zonder dat je het bestand noemt.</label></li>
+</ol>
+<p class="sidenote">Desktop-app: <code>/init</code>, <code>/clear</code> en <code>/context</code> typ je in het invoerveld van de Code-tab. Met <code>/memory</code> zie je in elke surface welke instructiebestanden er zijn, en open je ze.</p>
+<div class="win">Gelukt? Vanaf nu begint elke sessie in deze map met jullie afspraken en jullie woorden.</div>
+
+<h2>8. Toets jezelf</h2>
+<p class="sidenote">Eerst uit je hoofd, niet terug scrollen.</p>
+
+<fieldset class="quiz" data-answer="2">
+  <legend>Vraag 1</legend>
+  <p class="q">Je repo heeft een <code>AGENTS.md</code>. Je maakt een <code>CLAUDE.local.md</code> aan met eigen voorkeuren. Wat leest Claude nu?</p>
+  <button class="opt">Beide bestanden, eerst AGENTS.md</button>
+  <button class="opt">Alleen AGENTS.md, want dat is de standaard</button>
+  <button class="opt">Alleen CLAUDE.local.md; AGENTS.md valt weg</button>
+  <p class="why">Een <code>CLAUDE.md</code> of <code>CLAUDE.local.md</code> gaat standaard voor. Oplossing: zet <code>@AGENTS.md</code> bovenaan je eigen bestand.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="0">
+  <legend>Vraag 2</legend>
+  <p class="q">In <code>CLAUDE.md</code> staat: “Lees nooit het bestand .env.” Is dat genoeg?</p>
+  <button class="opt">Nee: het is context, geen blokkade. Gebruik een deny-regel.</button>
+  <button class="opt">Ja: Claude voert alles in CLAUDE.md altijd uit</button>
+  <button class="opt">Ja, als je het in hoofdletters schrijft</button>
+  <p class="why">Instructiebestanden sturen, ze dwingen niet af. Wat echt niet mag, blokkeer je met <code>/permissions</code>.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="1">
+  <legend>Vraag 3</legend>
+  <p class="q">Waar is een CONTEXT.md vooral voor?</p>
+  <button class="opt">Commando's om het project te bouwen en te testen</button>
+  <button class="opt">Eén vaste betekenis per vakterm, voor mensen en agents</button>
+  <button class="opt">Een logboek van alles wat Claude heeft gedaan</button>
+  <p class="why">Het is een woordenlijst met domeintaal. Claude laadt hem pas als <code>AGENTS.md</code> of <code>CLAUDE.md</code> ernaar verwijst.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="2">
+  <legend>Vraag 4</legend>
+  <p class="q">Wat hoort <em>niet</em> in een AGENTS.md?</p>
+  <button class="opt">“Queries in T-SQL, één per bestand in queries/”</button>
+  <button class="opt">“Claude heeft geen databaseverbinding”</button>
+  <button class="opt">De servernaam en het wachtwoord van het datawarehouse</button>
+  <p class="why">Het bestand staat in Git en is leesbaar voor iedereen met toegang. Geheimen horen in een kluis zoals 1Password.</p>
+</fieldset>
+<p class="score" data-quiz-score></p>
+
+<h2>Lees verder</h2>
+<p><strong>Primaire bron:</strong> <a href="https://code.claude.com/docs/en/memory">Claude Code docs: How Claude remembers your project</a>, vooral de delen over <code>AGENTS.md</code> en imports. Daarna <a href="https://agents.md">agents.md</a> voor de open standaard, en de <a href="https://github.com/mattpocock/skills">README van mattpocock/skills</a> over <code>GLOSSARY.md</code>.</p>
+
+<p class="ask">Vraag Claude Code gerust: <em>“Lees mijn CLAUDE.md. Welke regels kun je ook zonder dit bestand afleiden, en welke mis je nog?”</em></p>
+
+<nav class="course">
+  <a href="0002-context-window.html">← Les 2: Het context window</a>
+  <a href="0004-skills-van-vraag-tot-query.html">Les 4: Skills, van vraag tot query →</a>
+</nav>
+
+</main>
+</body>
+</html>

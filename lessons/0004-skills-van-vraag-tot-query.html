@@ -11,10 +11,10 @@
 <main>
 
 <header class="lesson">
-  <div class="kicker">Les 3 van 3 · ± 20 minuten</div>
+  <div class="kicker">Les 4 van 5 · ± 14 minuten</div>
   <h1>Skills: van vraag tot query</h1>
   <p class="lede">Een skill is een vaste werkwijze die je met één commando start. In deze les zie je drie skills een vraag omzetten in een query en een pull request.</p>
-  <p class="meta">Referentie: <a href="../reference/mcp-en-skills.html">Spiekbrief MCP en skills</a> · <a href="../reference/begrippen.html">Begrippenlijst</a> · Vorige les: <a href="0002-github-mcp-koppelen.html">GitHub koppelen</a></p>
+  <p class="meta">Referentie: <a href="../reference/mcp-en-skills.html">Spiekbrief MCP en skills</a> · <a href="../reference/begrippen.html">Begrippenlijst</a> · Vorige les: <a href="0003-agents-md-en-context-md.html">AGENTS.md en CONTEXT.md</a></p>
 </header>
 
 <div class="win"><strong>Na deze les kun je:</strong> skills installeren en vinden, een skill aanroepen, en <code>/grilling</code> gebruiken om je eigen vraag scherp te krijgen.</div>
@@ -32,7 +32,7 @@ claude plugin install mattpocock-skills@mattpocock</pre>
 <p>Start daarna <code>claude</code> en typ <code>/skills</code>. Je ziet nu onder andere <code>mattpocock-skills:grilling</code>, <code>mattpocock-skills:code-review</code> en <code>mattpocock-skills:pr</code>. Typ <code>/grill</code> en de autocomplete vult de rest aan.</p>
 <p class="sidenote">Desktop-app: open de Code-tab, typ <code>/</code> in het invoerveld en zoek de skill in de lijst.</p>
 
-<h2>3. Demo: van vraag tot query <span class="sidenote">(Frank, ± 12 min)</span></h2>
+<h2>3. Demo: van vraag tot query <span class="sidenote">(Frank, ± 10 min)</span></h2>
 <p>Kijk mee en let op twee dingen: wanneer stelt Claude vragen, en wanneer vraagt het toestemming?</p>
 <div class="asz">Claude krijgt geen databaseverbinding. Claude schrijft de query; Frank voert hem zelf uit. Terug in de chat komt alleen een geaggregeerd resultaat dat niet naar een patiënt wijst.</div>
 <ol class="steps">
@@ -40,11 +40,11 @@ claude plugin install mattpocock-skills@mattpocock</pre>
   <li><strong>Query laten schrijven.</strong> Als het antwoord duidelijk is, maakt Claude een plan. Frank keurt het goed; Claude schrijft de query naar een bestand in de repo. Let op de permission prompt voor het schrijven.</li>
   <li><strong>Zelf uitvoeren.</strong> Frank draait de query in zijn eigen databasetool. Hij plakt alleen het geaggregeerde resultaat terug als Claude het moet controleren.</li>
   <li><strong>Laten reviewen.</strong> <code>/mattpocock-skills:code-review main</code>. Twee subagents kijken in een frisse context: past de code bij de regels van de repo, en doet hij wat gevraagd is?</li>
-  <li><strong>Pull request maken.</strong> <code>/mattpocock-skills:pr</code> schrijft de beschrijving. Claude maakt de pull request via de GitHub MCP-server uit les 2. Frank leest de prompt voor <code>create_pull_request</code> voordat hij “Yes” kiest.</li>
+  <li><strong>Pull request maken.</strong> <code>/mattpocock-skills:pr</code> schrijft de beschrijving. Claude maakt de pull request via de GitHub MCP-server. Die koppel je zelf in <a href="0005-github-mcp-koppelen.html">les 5</a>. Frank leest de prompt voor <code>create_pull_request</code> voordat hij “Yes” kiest.</li>
 </ol>
 <p class="sidenote">Tip: een aantal van 1 of 2 in een kleine groep kan herleidbaar zijn naar een persoon. Twijfel je of een aggregaat herleidbaar is? Plak het dan niet.</p>
 
-<h2>4. Zelf doen <span class="sidenote">(± 5 min)</span></h2>
+<h2>4. Zelf doen <span class="sidenote">(± 4 min)</span></h2>
 <ol class="steps">
   <li><label class="check"><input type="checkbox"> Typ <code>/skills</code> en zoek <code>grilling</code>.</label></li>
   <li><label class="check"><input type="checkbox"> Zet de mode op Plan. Start <code>/mattpocock-skills:grilling</code> met een vraag uit je eigen werk, zonder patiëntgegevens. Bijvoorbeeld: <em>“Ik wil een overzicht van het aantal geplande afspraken per poli per week.”</em></label></li>
@@ -98,8 +98,8 @@ claude plugin install mattpocock-skills@mattpocock</pre>
 <p class="ask">Vraag Claude Code gerust: <em>“Welke skills heb ik, en welke past bij het schrijven van een nieuwe query?”</em> Het is je docent: blijf doorvragen.</p>
 
 <nav class="course">
-  <a href="0002-github-mcp-koppelen.html">← Les 2: GitHub koppelen</a>
-  <a href="../reference/draaiboek.html">Draaiboek workshop →</a>
+  <a href="0003-agents-md-en-context-md.html">← Les 3: AGENTS.md en CONTEXT.md</a>
+  <a href="0005-github-mcp-koppelen.html">Les 5: GitHub koppelen met MCP →</a>
 </nav>
 
 </main>

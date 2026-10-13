@@ -9,6 +9,8 @@ Frank wil collega's van ASZ (data engineers, BI-analisten en niet-technische col
 - Een collega noemt de ASZ-regels voor data: geen patiëntgegevens in prompts, geen echte data in repo's.
 - Een data engineer of BI-analist verbindt de GitHub MCP-server met een eigen fine-grained token en controleert de verbinding met `/mcp`. Niet-technische collega's zien hoe het werkt.
 - Een collega installeert de mattpocock-skills, vindt skills met `/skills` en gebruikt `/grilling`, `/code-review` en `/pr` om een query van vraag tot pull request te brengen, zonder dat Claude de database raakt.
+- Een collega legt uit wat het context window is, ziet met `/context` hoe vol het is, en kiest bewust tussen doorwerken, `/compact` en `/clear`.
+- Een collega legt uit welk instructiebestand Claude leest (`CLAUDE.md` of `AGENTS.md`), schrijft er een voor de eigen repo met de ASZ-afspraken, en legt domeintaal vast in een `CONTEXT.md`.
 
 ## Constraints
 - Workshop van ongeveer een uur, geleid door Frank. Lessen dienen als hand-out en oefenmateriaal.

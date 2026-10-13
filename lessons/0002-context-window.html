@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Het context window</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/course.js" defer></script>
+</head>
+<body>
+<main>
+
+<header class="lesson">
+  <div class="kicker">Les 2 van 5 · ± 8 minuten</div>
+  <h1>Het context window: waarom Claude soms vergeet</h1>
+  <p class="lede">Claude ziet alleen wat in zijn werkgeheugen past. Hoe voller dat geheugen, hoe slechter het antwoord. Wie dat begrijpt, krijgt betere resultaten.</p>
+  <p class="meta">Referentie: <a href="../reference/begrippen.html">Begrippenlijst</a> · Vorige les: <a href="0001-van-chat-naar-agent-veilig-werken.html">Veilig werken</a></p>
+</header>
+
+<div class="win"><strong>Na deze les kun je:</strong> uitleggen wat het context window is en wat erin zit, met <code>/context</code> zien hoe vol het is, en kiezen tussen doorwerken, <code>/compact</code> en <code>/clear</code>.</div>
+
+<h2>1. Wat is het context window?</h2>
+<p>Een taalmodel onthoudt niets tussen twee vragen. Bij elke beurt stuurt Claude Code het hele gesprek opnieuw naar het model. Dat pakket heet de <em>context</em>. Het <em>context window</em> is de maximale omvang ervan, gemeten in <em>tokens</em>: stukjes tekst van gemiddeld een paar letters. Bij de meeste modellen past er ongeveer 200.000 tokens in.</p>
+<p>Wat niet in de context staat, bestaat voor Claude niet. Wat er wel in staat, beïnvloedt elk antwoord, ook als het er niet meer toe doet.</p>
+
+<h2>2. Wat zit erin?</h2>
+<div class="table-wrap"><table>
+  <tr><th>Wanneer</th><th>Wat</th></tr>
+  <tr><td>Vóór je eerste vraag</td><td>Systeeminstructies van Claude Code, je <code>CLAUDE.md</code> of <code>AGENTS.md</code>, korte beschrijvingen van skills, namen van MCP-tools.</td></tr>
+  <tr><td>Tijdens het werk</td><td>Jouw berichten, Claudes antwoorden, elk bestand dat Claude leest, de uitvoer van elk commando.</td></tr>
+</table></div>
+<p>Let op het verschil tussen wat jij ziet en wat Claude ziet. In je scherm staat één regel <code>Read afspraken.csv</code>. In de context staat het hele bestand. Eén zoektocht door een map met queries kan zo tienduizenden tokens kosten. <cite>(<a href="https://code.claude.com/docs/en/context-window">Docs: context window</a>)</cite></p>
+
+<h2>3. Waarom het je antwoord beïnvloedt</h2>
+<p>“LLM performance degrades as context fills.” Bij een volle context vergeet Claude eerdere instructies en maakt het meer fouten. <cite>(<a href="https://code.claude.com/docs/en/best-practices">Best practices</a>)</cite> Drie herkenbare patronen:</p>
+<div class="table-wrap"><table>
+  <tr><th>Patroon</th><th>Wat gebeurt er</th><th>Oplossing</th></tr>
+  <tr><td><strong>Alles in één sessie</strong></td><td>Je begint met een query, vraagt tussendoor iets over Power BI, en gaat terug naar de query. Oude, losse informatie leidt Claude af.</td><td><code>/clear</code> tussen taken die niets met elkaar te maken hebben.</td></tr>
+  <tr><td><strong>Blijven corrigeren</strong></td><td>Claude doet het fout, jij corrigeert, het blijft fout. Alle mislukte pogingen staan nog in de context en sturen het volgende antwoord.</td><td>Na twee mislukte correcties: <code>/clear</code> en een betere eerste prompt met wat je geleerd hebt.</td></tr>
+  <tr><td><strong>Eindeloos zoeken</strong></td><td>“Zoek uit hoe dit werkt” zonder grens. Claude leest honderden bestanden en de context loopt vol.</td><td>Maak de vraag klein: noem de map of het bestand.</td></tr>
+</table></div>
+<p>Een schone sessie met een goede prompt wint bijna altijd van een lange sessie vol correcties. <cite>(<a href="https://code.claude.com/docs/en/best-practices#avoid-common-failure-patterns">Best practices</a>)</cite></p>
+
+<h2>4. Je gereedschap</h2>
+<div class="table-wrap"><table>
+  <tr><th>Commando</th><th>Wat het doet</th><th>Wanneer</th></tr>
+  <tr><td><code>/context</code></td><td>Toont hoe vol de context is en waarmee.</td><td>Als antwoorden slechter worden, of uit nieuwsgierigheid.</td></tr>
+  <tr><td><code>/clear</code></td><td>Maakt de context leeg. Je instructiebestand laadt opnieuw.</td><td>Bij een nieuwe taak. Gebruik het vaak.</td></tr>
+  <tr><td><code>/compact</code></td><td>Vervangt het gesprek door een samenvatting. Met een opdracht stuur je wat blijft: <code>/compact Bewaar de definitie van een opname</code>.</td><td>Midden in één lange taak, als je de draad wilt houden.</td></tr>
+  <tr><td><code>/rewind</code></td><td>Terug naar een eerder punt in het gesprek (zie <a href="0001-van-chat-naar-agent-veilig-werken.html">les 1</a>).</td><td>Claude sloeg een verkeerde weg in.</td></tr>
+</table></div>
+<p>Raakt de context bijna vol, dan vat Claude Code het gesprek zelf samen (<em>auto-compact</em>). Een samenvatting verliest details. Wacht daar dus niet op: kies zelf je moment. <cite>(<a href="https://code.claude.com/docs/en/best-practices#manage-context-aggressively">Best practices</a>)</cite></p>
+<p class="sidenote">Ook zonder Claude Code geldt dit. In een lange ChatGPT-chat vergeet het model net zo goed wat je bovenaan schreef. Begin daar ook een nieuw gesprek voor een nieuwe vraag.</p>
+
+<div class="asz">Alles in de context gaat naar Anthropic (zie <a href="0001-van-chat-naar-agent-veilig-werken.html">les 1</a>). Laat Claude dus geen grote exports of logbestanden lezen “om te kijken wat erin staat”. Dat kost context, en het kan patiëntgegevens bevatten. Geef Claude alleen wat het voor de taak nodig heeft.</div>
+
+<h2>5. Zelf doen <span class="sidenote">(± 4 min)</span></h2>
+<p>Werk in je oefenmap uit <a href="0001-van-chat-naar-agent-veilig-werken.html">les 1</a>. Vink elke stap af.</p>
+<ol class="steps">
+  <li><label class="check"><input type="checkbox"> Start Claude Code in de oefenmap en typ <code>/context</code>. Hoeveel is al gebruikt, voordat je iets gevraagd hebt?</label></li>
+  <li><label class="check"><input type="checkbox"> Vraag: <em>“Lees afspraken.csv en vertel welke poli de meeste afspraken heeft.”</em> Typ daarna weer <code>/context</code>. Wat is erbij gekomen?</label></li>
+  <li><label class="check"><input type="checkbox"> Vraag iets wat er niets mee te maken heeft, bijvoorbeeld: <em>“Hoe maak ik een draaitabel in Excel?”</em> Dit is het patroon “alles in één sessie”.</label></li>
+  <li><label class="check"><input type="checkbox"> Typ <code>/clear</code> en daarna <code>/context</code>. Vraag: <em>“Welke poli had de meeste afspraken?”</em> Claude weet het niet meer en moet het bestand opnieuw lezen.</label></li>
+</ol>
+<p class="sidenote">Desktop-app: typ de commando's in het invoerveld van de Code-tab.</p>
+<div class="win">Gelukt? Dan heb je gezien dat de context al gevuld is vóór je eerste vraag, dat elk gelezen bestand ruimte kost, en dat <code>/clear</code> echt alles wist.</div>
+
+<h2>6. Toets jezelf</h2>
+<p class="sidenote">Eerst uit je hoofd, niet terug scrollen.</p>
+
+<fieldset class="quiz" data-answer="1">
+  <legend>Vraag 1</legend>
+  <p class="q">In je scherm staat alleen <code>Read Opname.sql</code>. Wat staat er in de context?</p>
+  <button class="opt">Alleen de bestandsnaam</button>
+  <button class="opt">De volledige inhoud van het bestand</button>
+  <button class="opt">Niets, lezen kost geen context</button>
+  <p class="why">Claude ziet de hele inhoud. Jij ziet één regel. Elk gelezen bestand kost dus ruimte.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="2">
+  <legend>Vraag 2</legend>
+  <p class="q">Je hebt Claude drie keer gecorrigeerd op dezelfde query, en het blijft fout. Wat werkt meestal het best?</p>
+  <button class="opt">Een vierde keer corrigeren, met hoofdletters</button>
+  <button class="opt">Doorgaan en wachten op auto-compact</button>
+  <button class="opt"><code>/clear</code> en een nieuwe, preciezere eerste prompt</button>
+  <p class="why">De mislukte pogingen staan in de context en sturen het volgende antwoord. Begin schoon, met wat je nu weet.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="0">
+  <legend>Vraag 3</legend>
+  <p class="q">Je zit midden in een lange taak en de context raakt vol. Je wilt de draad niet kwijt. Wat doe je?</p>
+  <button class="opt"><code>/compact</code> met een opdracht wat er bewaard moet blijven</button>
+  <button class="opt"><code>/clear</code></button>
+  <button class="opt">Niets, de context is onbeperkt</button>
+  <p class="why"><code>/compact</code> vat samen en houdt de kern. <code>/clear</code> wist alles; dat is voor een nieuwe taak.</p>
+</fieldset>
+
+<fieldset class="quiz" data-answer="1">
+  <legend>Vraag 4</legend>
+  <p class="q">Een collega wil Claude een export van 50.000 regels uit het DWH laten lezen “om te zien wat erin staat”. Wat is het probleem?</p>
+  <button class="opt">Geen probleem, het context window is groot genoeg</button>
+  <button class="opt">Het vult de context, en de data gaat naar Anthropic</button>
+  <button class="opt">Claude kan geen CSV-bestanden lezen</button>
+  <p class="why">Twee problemen tegelijk: de antwoorden worden slechter, en mogelijk gaan patiëntgegevens naar buiten. Geef Claude alleen wat nodig is, en nooit echte patiëntdata.</p>
+</fieldset>
+<p class="score" data-quiz-score></p>
+
+<h2>Lees verder</h2>
+<p><strong>Primaire bron:</strong> <a href="https://code.claude.com/docs/en/context-window">Claude Code docs: Explore the context window</a>, een interactieve simulatie van hoe een sessie volloopt. Daarna het deel “Manage your session” in <a href="https://code.claude.com/docs/en/best-practices#manage-your-session">Best practices</a>.</p>
+
+<p class="ask">Vraag Claude Code gerust: <em>“Ik typte net /context. Leg uit wat elk onderdeel betekent en wat ik kan doen om ruimte te besparen.”</em></p>
+
+<nav class="course">
+  <a href="0001-van-chat-naar-agent-veilig-werken.html">← Les 1: Veilig werken</a>
+  <a href="0003-agents-md-en-context-md.html">Les 3: AGENTS.md en CONTEXT.md →</a>
+</nav>
+
+</main>
+</body>
+</html>
